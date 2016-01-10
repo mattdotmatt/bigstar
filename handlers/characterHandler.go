@@ -12,7 +12,7 @@ func GetCharacters(characters data.CharacterRepository) http.HandlerFunc {
 		c, err := characters.AllCharacters()
 
 		if characters == nil || err != nil {
-			w.WriteHeader(http.StatusNotFound)
+			w.WriteHeader(http.StatusBadRequest)
 		}
 
 		json.NewEncoder(w).Encode(c)

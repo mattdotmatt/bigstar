@@ -7,7 +7,7 @@ type CharacterRepository interface {
 }
 
 type characterRepository struct {
-	*jsonDB `inject:""`
+	*JsonDB `inject:""`
 }
 
 func NewCharacterRepository() CharacterRepository {

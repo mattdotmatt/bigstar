@@ -1,4 +1,4 @@
 package data
 
-type jsonDB struct {
+type JsonDB struct {
 }
