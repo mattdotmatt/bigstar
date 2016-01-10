@@ -5,6 +5,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/facebookgo/inject"
 	"github.com/mattdotmatt/bigstar/data"
+	"github.com/mattdotmatt/bigstar/repositories"
 	"github.com/mattdotmatt/bigstar/routers"
 	"log"
 	"net/http"
@@ -15,15 +16,12 @@ func Start(siteUrl string, port int, fileLocation string) {
 	var router routers.Router
 	var graph inject.Graph
 
-	//	db, err := data.NewDb(connection, "fansz")
-
-	//	if err != nil {
-	//		panic("Cannot connect to DB")
-	//}
+	// create database
+	db := data.NewJsonDB(fileLocation)
 
 	if err := graph.Provide(
-		//		&inject.Object{Value: db},
-		&inject.Object{Value: data.NewCharacterRepository()},
+		&inject.Object{Value: db},
+		&inject.Object{Value: repositories.NewCharacterRepository()},
 		&inject.Object{Value: &router}); err != nil {
 		log.Fatalf("Error pproviding dependencies: ", err.Error())
 	}

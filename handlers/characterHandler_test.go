@@ -15,23 +15,27 @@ import (
 
 var (
 	server        *httptest.Server
-	characters    []*models.Character
+	characters    []models.Character
 	charactersUrl string
 	dataError     error
 )
 
 type mockDB struct{}
 
-func (mdb *mockDB) AllCharacters() ([]*models.Character, error) {
+func (mdb *mockDB) AllCharacters() ([]models.Character, error) {
 	return characters, dataError
+}
+
+func (mdb *mockDB) SaveCharacters(characters []models.Character) error {
+	return dataError
 }
 
 func TestCharacterHandler(t *testing.T) {
 	Convey("Given characters exist", t, func() {
 
-		characters = make([]*models.Character, 0)
+		characters = make([]models.Character, 0)
 		character := models.Character{FirstName: "Matt", LastName: "Young"}
-		characters = append(characters, &character)
+		characters = append(characters, character)
 
 		r := mux.NewRouter()
 
@@ -68,7 +72,7 @@ func TestCharacterHandler(t *testing.T) {
 
 	Convey("Given no characters exist", t, func() {
 
-		characters = make([]*models.Character, 0)
+		characters = make([]models.Character, 0)
 
 		r := mux.NewRouter()
 
@@ -103,9 +107,9 @@ func TestCharacterHandler(t *testing.T) {
 
 	Convey("Given characters exist", t, func() {
 
-		characters = make([]*models.Character, 0)
+		characters = make([]models.Character, 0)
 		character := models.Character{FirstName: "Matt", LastName: "Young"}
-		characters = append(characters, &character)
+		characters = append(characters, character)
 
 		r := mux.NewRouter()
 
