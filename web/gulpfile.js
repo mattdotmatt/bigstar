@@ -8,26 +8,26 @@ var reactify = require('reactify');
 gulp.task('styles', function () {
     log('Compiling SASS ==> CSS');
     return gulp
-        .src('./css/sass/**/*.scss')
+        .src('./sass/**/*.scss')
         .pipe($.plumber({ errorHandler: handleError }))
         .pipe($.sourcemaps.init())
         .pipe($.sass())
         .pipe($.sourcemaps.write())
         .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
-        .pipe(gulp.dest('./css/'))
+        .pipe(gulp.dest('./public/css/'))
         .pipe($.livereload());
 });
 
 
 gulp.task('sass-watcher', function () {
     $.livereload.listen();
-    gulp.watch('./css/sass/**/*.scss', ['styles']);
+    gulp.watch('./sass/**/*.scss', ['styles']);
 });
 
 gulp.task('react', function(){
     log('Compiling React ==> JS');
     var bundler = browserify({
-        entries: ['./js/jsx/main.jsx'],
+        entries: ['./jsx/main.jsx'],
         transform: [reactify],
         extensions: ['.jsx'],
         debug: true,
@@ -43,7 +43,7 @@ gulp.task('react', function(){
             .bundle()
             .on('error', $.util.log.bind($.util, 'Browserify error'))
             .pipe(source('app.js'))
-            .pipe(gulp.dest('./js'))
+            .pipe(gulp.dest('./public/js'))
             .pipe($.livereload());
     };
 
@@ -53,7 +53,7 @@ gulp.task('react', function(){
 gulp.task('jsx-watcher', function(){
     $.livereload.listen();
     var bundler = watchify(browserify({
-        entries: ['./js/jsx/main.jsx'],
+        entries: ['./jsx/main.jsx'],
         transform: [reactify],
         extensions: ['.jsx'],
         debug: true,
@@ -69,7 +69,7 @@ gulp.task('jsx-watcher', function(){
             .bundle()
             .on('error', $.util.log.bind($.util, 'Browserify error'))
             .pipe(source('app.js'))
-            .pipe(gulp.dest('./js'))
+            .pipe(gulp.dest('./public/js'))
             .pipe($.livereload());
     };
 

@@ -41,7 +41,7 @@ func SaveCharacters(characters repositories.CharacterRepository) http.HandlerFun
 		for _, character := range input {
 			if err := validator.Validate(character); err != nil {
 				w.WriteHeader(http.StatusBadRequest)
-				json.NewEncoder(w).Encode(err.Error())
+				json.NewEncoder(w).Encode("First name cannot be empty")
 				return
 			}
 		}

@@ -3,5 +3,5 @@ package main
 import "github.com/mattdotmatt/bigstar/server"
 
 func main() {
-	server.Start(8181, "./public/data/db.json")
+	server.Start(8181, "./web/data/db.json")
 }

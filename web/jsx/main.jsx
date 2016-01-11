@@ -24,8 +24,7 @@ var Main = React.createClass({
 
         xhr.onload = function () {
             if (xhr.status === 200) {
-                this.getCharacters();
-                this.setState({ showMessage: true, message: "Characters have been updated" })
+                this.setState({ showErrors: false, showMessage: true, message: "Characters have been updated" })
                 return;
             }
             else if (xhr.status === 404) {
@@ -47,14 +46,14 @@ var Main = React.createClass({
         xhr.onload = function () {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText);
-                this.setState({ showErrors: false, characters: data });
+                this.setState({showErrors: false, characters: data});
                 return;
             }
             else if (xhr.status === 404) {
-                this.setState({ showMessage: false, showErrors: true, errorMessage: "Darn, something went wrong" })
+                this.setState({ showErrors: true, errorMessage: "Darn, something went wrong" })
                 return;
             } else if (xhr.status !== 200) {
-                this.setState({ showMessage: false, showErrors: true, errorMessage: "Darn, something went wrong" })
+                this.setState({ showErrors: true, errorMessage: "Darn, something went wrong" })
                 return;
             }
         }.bind(this);

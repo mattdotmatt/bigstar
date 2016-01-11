@@ -21,7 +21,7 @@ func (router Router) NewRouter() *mux.Router {
 		negroni.Wrap(apiRouter(router.CharacterRepository)),
 	))
 
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./web/public/")))
 
 	return r
 
