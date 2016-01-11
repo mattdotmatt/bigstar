@@ -15,53 +15,38 @@ func NewJsonDB(fileLocation string) *JsonDB {
 	checkDatabaseExists(fileLocation)
 
 	// create channel to communicate over
-	requests := make(chan DataRequest)
+	request := make(chan DataRequest)
 
 	// start watching request channel for work
-	go processRequests(requests, fileLocation)
+	go processRequests(request, fileLocation)
 
-	return &JsonDB{Requests: requests}
+	return &JsonDB{Requests: request}
 }
 
 func (db *JsonDB) GetAllCharacters() ([]models.Character, error) {
 
-	arr := make([]models.Character, 0)
+	request := NewReadCharacters()
 
-	characters, err := db.getHash()
+	db.Requests <- request
 
-	if err != nil {
-		return arr, err
+	if err := <-request.ExitChan(); err != nil {
+		return nil, err
 	}
 
-	for _, value := range characters {
-		arr = append(arr, value)
-	}
-	return arr, nil
+	return <-request.characters, nil
 }
 
 func (db *JsonDB) SaveAllCharacters(characters []models.Character) error {
 
-	job := NewSaveCharacters(characters)
+	request := NewSaveCharacters(characters)
 
-	db.Requests <- job
-
-	if err := <-job.ExitChan(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *JsonDB) getHash() ([]models.Character, error) {
-
-	request := NewReadCharacters()
-
-	c.Requests <- request
+	db.Requests <- request
 
 	if err := <-request.ExitChan(); err != nil {
-		return make([]models.Character, 0), err
+		return err
 	}
 
-	return <-request.characters, nil
+	return nil
 }
 
 func checkDatabaseExists(fileLocation string) {

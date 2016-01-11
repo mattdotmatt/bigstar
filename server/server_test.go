@@ -113,7 +113,7 @@ func TestIntegrationTests(t *testing.T) {
 
 			http.DefaultClient.Do(request)
 
-			Convey("When I get the characters", func() {
+			Convey("And I get the characters", func() {
 
 				request, err := http.NewRequest("GET", fmt.Sprintf("%s/api/characters", ts.URL), nil)
 
@@ -124,7 +124,7 @@ func TestIntegrationTests(t *testing.T) {
 					So(res.StatusCode, ShouldEqual, 200)
 				})
 
-				Convey("And the character data should be returned", func() {
+				Convey("And the updated character data should be returned", func() {
 					content, _ := ioutil.ReadAll(res.Body)
 
 					var characters []models.Character

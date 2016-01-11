@@ -8,22 +8,24 @@ import (
 
 type DataRequest interface {
 	ExitChan() chan error
-	Run(characters []models.Character) ([]models.Character, error)
+	Run(characters []models.Character) []models.Character
 }
 
-func processRequests(requests chan DataRequest, db string) {
+func processRequests(incomingRequest chan DataRequest, db string) {
 	for {
-		request := <-requests
+		request := <-incomingRequest
 
-		// Read the database
-		characters := make([]models.Character, 0)
 		content, err := ioutil.ReadFile(db)
+
 		if err == nil {
+
+			characters := []models.Character{}
+
 			if err = json.Unmarshal(content, &characters); err == nil {
 
-				c, err := request.Run(characters)
+				c := request.Run(characters)
 
-				if err == nil && c != nil {
+				if c != nil {
 					b, err := json.Marshal(c)
 					if err == nil {
 						err = ioutil.WriteFile(db, b, 0644)

@@ -19,6 +19,6 @@ func (save SaveCharacters) ExitChan() chan error {
 	return save.exitChan
 }
 
-func (save SaveCharacters) Run(characters []models.Character) ([]models.Character, error) {
-	return save.toSave, nil
+func (save SaveCharacters) Run(characters []models.Character) []models.Character {
+	return save.toSave
 }

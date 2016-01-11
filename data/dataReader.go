@@ -18,9 +18,10 @@ func NewReadCharacters() *ReadCharacters {
 func (read ReadCharacters) ExitChan() chan error {
 	return read.exitChan
 }
-func (read ReadCharacters) Run(characters []models.Character) ([]models.Character, error) {
+
+func (read ReadCharacters) Run(characters []models.Character) []models.Character {
 
 	read.characters <- characters
 
-	return nil, nil
+	return nil
 }
